@@ -289,7 +289,6 @@ def insert_csv_into_db(db_path:str|Path,df:pd.DataFrame):
                     values = cell_types.copy()
                 else:   
                     values:pd.Series = df[col].unique()
-                    values = values.dropna()
                 
                 #takes advantage that table key value has same name as table
                 #to retrieve all values already in the dataset
