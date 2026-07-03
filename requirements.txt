@@ -1,0 +1,21 @@
+# Teiko Technical Assessment
+# Author: Nathaniel Schoppa
+# Python 3.14
+
+# ── Web dashboard ──────────────────────────────────────────────────────────────
+dash==2.17.0
+plotly==5.22.0
+
+# ── Data processing ────────────────────────────────────────────────────────────
+pandas==2.2.2
+numpy==2.0.0
+
+# ── Statistical analysis ───────────────────────────────────────────────────────
+scipy==1.18.0
+statsmodels==0.14.2
+
+# ── Database ───────────────────────────────────────────────────────────────────
+# sqlite3 is part of the Python standard library — no install needed
+
+# ── Testing ────────────────────────────────────────────────────────────────────
+pytest==8.2.2
