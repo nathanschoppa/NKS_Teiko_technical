@@ -12,6 +12,8 @@ import numpy as np
 from pathlib import Path 
 import logging
 
+logger = logging.getLogger(__name__)
+
 @contextmanager
 def _db_connection(db_path:str|Path):
     '''
@@ -144,13 +146,6 @@ def _init_db_tables(_conn:sqlite3.Connection):
             )
         ''')
     
-    #Cell count entity
-    cursor.execute('''
-            CREATE TABLE IF NOT EXISTS CELL_TYPE (
-                cell_type TEXT NOT NULL,
-                PRIMARY KEY (cell_type)
-            )
-        ''')
     cursor.execute('''
             CREATE TABLE IF NOT EXISTS CELL_COUNT (
                 Sample TEXT NOT NULL,
@@ -177,7 +172,8 @@ def _write_insert(table:str,
         raise ValueError(f'Cannot insert more than 999 rows!')
     
     column_clause = ', '.join(columns)
-    single_row = f'({', '.join('?' * len(columns))})'
+    placeholders  = ', '.join('?' * len(columns))
+    single_row    = f'({placeholders})'
     return f'INSERT INTO {table} ({column_clause}) VALUES {single_row}'
 
 
@@ -347,4 +343,4 @@ if __name__ == '__main__':
     db_path = r'teiko.db'
     init_db(db_path)
 
-logger = logging.getLogger(__name__)
+
