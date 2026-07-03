@@ -297,13 +297,34 @@ class TestInsertCsvIntoDb:
             assert ct in cell_types
 
     def test_idempotent_insert(self, initialized_db: Path, minimal_df: pd.DataFrame):
-        '''Inserting the same CSV twice should not create duplicate rows.'''
+        '''Inserting the same CSV twice should not raise and should not duplicate rows.'''
         insert_csv_into_db(initialized_db, minimal_df)
-        insert_csv_into_db(initialized_db, minimal_df)
+        
+        # Second insert should log warnings but not crash
+        try:
+            insert_csv_into_db(initialized_db, minimal_df)
+        except Exception as e:
+            pytest.fail(f'Second insert raised unexpectedly: {e}')
+        
         with _db_connection(initialized_db) as conn:
             result = conn.execute('SELECT COUNT(*) FROM SUBJECT').fetchone()
         assert result[0] == 2   # still 2, not 4
 
+    def test_duplicate_insert_logs_warning(self, initialized_db: Path, 
+                                            minimal_df: pd.DataFrame,
+                                            caplog):
+        '''Duplicate inserts should log a WARNING, not raise.'''
+        import logging
+        insert_csv_into_db(initialized_db, minimal_df)
+        
+        with caplog.at_level(logging.WARNING, logger='teiko_database'):
+            insert_csv_into_db(initialized_db, minimal_df)
+        
+        assert any('constraint violation' in record.message.lower() 
+                   for record in caplog.records
+                   if record.levelname == 'WARNING')
+
+    
     def test_cell_count_values_correct(self, initialized_db: Path, minimal_df: pd.DataFrame):
         '''Cell count values should match the input DataFrame.'''
         insert_csv_into_db(initialized_db, minimal_df)
