@@ -11,7 +11,7 @@ To get things started, run the makefile and open a browser to http://localhost:8
 
 The application creates a SQLite database called **teiko.db**. You can access it for future uses, but the application handles all the SQL calls. This should satisfy your requirement *part 1: data management*. The databased is structured according to the ERD below. Green are reference entities, blue are strong entities, and orange are weak entities.
 
-![alt text](image.png)
+![alt text](ERD.png)
 
 From here, I'll cover the sectionds and where to find information.
 
