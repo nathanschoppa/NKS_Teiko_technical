@@ -13,7 +13,7 @@ if __name__ == '__main__':
     )
     logger = logging.getLogger(__name__)
     
-    db_path = r'C:\Users\admin\Documents\Teiko Assesment\teiko.db'
+    db_path = r'teiko.db'
     init_db(db_path)
     cell_df = pd.read_csv('cell-count.csv')
     insert_csv_into_db(db_path,cell_df)
