@@ -15,6 +15,7 @@ from dash import dcc, html, dash_table, Input, Output,State, callback
 from teiko_database import _db_connection
 import plotly.express as px
 import pandas as pd
+from pathlib import Path
 from scipy.stats import ttest_ind
 import statsmodels.stats.multitest as multitest
 from itertools import combinations
@@ -346,13 +347,13 @@ def styled_value_counts(df: pd.DataFrame, columns: list[str]) -> html.Div:
                             'position':        'relative',
                         }, children=[
                             html.Div(style={
-                                'width':           f'{row['pct']}%',
+                                'width':           '{}%'.format(row['pct']),
                                 'height':          '100%',
                                 'borderRadius':    '3px',
                                 'backgroundColor': ACCENT,
                             })
                         ]),
-                        html.Span(f'{row['count']} ({row['pct']}%)', style={
+                        html.Span('{} ({}%)'.format(row['count'], row['pct']), style={
                             'fontSize':   '12px',
                             'color':      TEXT_MUTED,
                             'fontFamily': FONT,
@@ -595,7 +596,7 @@ app.layout = html.Div(style={
                         options=[{'label': col, 'value': col} for col in col_list],
                         placeholder='Select Factors…',
                         multi=True,   #multi-select for this section
-                        value=col_list (default: all selected)
+                        value=col_list #(default: all selected)
                     ),
                     #select filters for the data
                     #since value can only be a str or list[str], we have to be creative
@@ -682,16 +683,16 @@ def filter_subject_table(column:str, sample: str|list[str], population: str|list
     filtered = cell_data.copy()
     if sample:
         #sample can be list of sample ids
-        filtered = cell_data[cell_data['sample'].isin(sample)]
+        filtered = filtered[filtered['sample'].isin(sample)]
     if population:
         #sample can be list of cell_types
-        filtered = cell_data[cell_data['population'].isin(population)]
+        filtered = filtered[filtered['population'].isin(population)]
     if column:
         #proportion will sort in reverse otherwise
         if column == 'proportion':
-            filtered = cell_data.sort_values(by=column,ascending=False)
+            filtered = filtered.sort_values(by=column,ascending=False)
         else:   
-            filtered = cell_data.sort_values(by=column)
+            filtered = filtered.sort_values(by=column)
     return filtered.to_dict('records')
 
 @callback(
