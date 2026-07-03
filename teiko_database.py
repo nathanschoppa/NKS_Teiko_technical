@@ -172,7 +172,7 @@ def _write_insert(table:str,
         raise ValueError(f'Cannot insert more than 999 rows!')
     
     column_clause = ', '.join(columns)
-    placeholders  = ', '.join('?' * len(columns))
+    placeholders  = ','.join('?' * len(columns))
     single_row    = f'({placeholders})'
     return f'INSERT INTO {table} ({column_clause}) VALUES {single_row}'
 
@@ -189,12 +189,13 @@ def _insert_value_into_table(_conn:sqlite3.Connection,
     ###catch invalid entries
     if batch < 1:
         raise ValueError(f'batch must be at least 1, got {batch}')
+    
+    if not columns:
+        raise ValueError('columns list cannot be empty') 
     max_batch = 999 // len(columns)
     if batch > max_batch:
         raise ValueError(f'batch must be at less than 999/'
                          f'(number of columns), got {batch} > {max_batch}')
-    if not columns:
-        raise ValueError('columns list cannot be empty')
     if not table:
         raise ValueError('table name cannot be empty')
     
