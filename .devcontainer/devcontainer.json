@@ -1,0 +1,12 @@
+{
+    "name": "Teiko Technical Assessment",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "postCreateCommand": "pip install -r requirements.txt",
+    "forwardPorts": [8050],
+    "portsAttributes": {
+        "8050": {
+            "label": "Teiko Dashboard",
+            "onAutoForward": "openBrowser"
+        }
+    }
+}
