@@ -19,10 +19,14 @@ dashboard:
 	python teiko_display.py
 
 test:
-	pytest tests/ -v --tb=short
+	pytest -v --tb=short
 
 clean:
 	rm -f teiko.db
 	rm -f teiko.log
+	rm -f outputs/cell_analytics_summary.csv
+	rm -f outputs/pairwise_results.csv
+	rm -f outputs/proportions_boxplot.png
+	rm -f outputs/sample_data.csv
 
 .PHONY: setup pipeline dashboard test clean
